@@ -1,0 +1,57 @@
+{% extends "base.html"%} {% block content %}
+<div class="post block">
+    <body>
+        
+        <small>ID:{{post.id}} </small>
+        <br>
+        <small>投稿日:{{post.created_at}}</small>
+        <br><br>
+        <strong class="is-size-2" >{{post.title}}</strong>
+        <br><br>
+        <p class="is-size-4 p-5 has-background-light">{{post.body|linebreaksbr}}</p>
+        <br><br>
+        <!--記事へのいいね-->
+        <small>いいね {{post.goods.count}}</small>
+        <form action="." method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="post_id" value="{{ post.id }}">
+            {{formPostGood}}
+            <button button name="post_good_button" value="1">いいね！</button>
+        </form>
+        <br><br>
+        <!--記事へのコメントフォーム-->
+        <p class="is-size-5">記事へ一言コメントできます</p>
+        <br>
+        <form action="." method="POST">
+            {% csrf_token %}
+            
+            <p>コメント：{{form.body}}</p>
+            <button name="comment_button" value="1">送信</button>
+            <br>
+            <hr>
+        </form>
+        
+        <!--記事へ送信されたのコメントたち-->
+        <p class="is-size-4">コメント一覧</p>
+        <br>
+        {% for comment in post.comments.all  reversed %}
+
+            <small>{{comment.created_at}}&nbsp;&nbsp;[ID:{{comment.id}}]   </small>
+            <br><br>
+            <p style="margin-left: 20px;"  class="has-text-success  has-text-weight-bold">{{comment.body}}</p>
+            <br>
+             <!--コメントへのいいね-->
+            <small>いいね {{comment.goods.count}}</small>
+            <form action="." method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="post_id" value="{{ post.id }}">
+                <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                {{formPostGood}}
+                <button button name="comment_good_button" value="1">いいね！</button>
+            </form>
+            <hr>
+        {% endfor %}
+
+    </body>
+</div>
+{%  endblock %}

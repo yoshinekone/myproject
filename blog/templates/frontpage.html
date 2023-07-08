@@ -1,0 +1,34 @@
+{% extends "base.html"%} {% block content %}
+<div class="post block">
+    <body>
+        <p class="is-size-3">君だけの記事を投稿しよう！</p>
+        <hr>
+        <form action="." method="POST">
+            {% csrf_token %}
+            <p>タイトル</p>
+            <p>{{form.title}}</p>
+            <br>
+            <p>本文</p>
+            <p>{{form.body}}</p>
+            <br>
+            <button>投稿</button>
+            <hr>
+            <p class="is-size-4">投稿済み記事一覧</p>
+            <br>
+            {% for post in posts %}
+                <small>ID:{{post.id}} &nbsp;&nbsp;</small> 
+                <small>投稿日:{{post.created_at}}</small>
+                <br><br>
+                <strong   style="margin-left: 20px;"><a href="{% url 'postpage' post_id=post.id %}">{{post.title}}</a></strong>
+                <small>&nbsp;&nbsp;[いいね {{post.goods.count}}]</small>
+                
+                <hr>
+
+            {% endfor %}
+
+        </form>
+
+
+    </body>
+</div>
+{%  endblock %}
